@@ -72,7 +72,6 @@ export default class AlertForm extends React.Component {
         const reason = this.state.reason || '';
         const action = this.state.action || '';
         const { alert, showAlert, updateSuccess } = this.state;
-        console.log(comment);
         return (
             <div className="row">
                 <div className="col-sm-9">
