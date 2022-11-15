@@ -2,12 +2,12 @@ import React from 'react';
 import AlertService from '../services/AlertService';
 import AlertItem from '../components/AlertItem';
 import AlertDetail from '../components/AlertDetail';
+import GlobalStorage from '../global/GlobalStorage';
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            alerts: [],
             selected: null
         };
         this.alertService = new AlertService();
@@ -20,11 +20,10 @@ export default class App extends React.Component {
             if (err) {
                 return self.setState({ err });
             }
-            const updateState = { alerts };
+            GlobalStorage.alerts = alerts;
             if (alerts.length > 0) {
-                updateState.selected = alerts[0];
+                self.setState({ selected: alerts[0] });
             }
-            self.setState(updateState);
         });
     }
 
@@ -36,7 +35,8 @@ export default class App extends React.Component {
 
     render() {
         const self = this;
-        const { selected, alerts } = self.state;
+        const { selected } = self.state;
+        const alerts = GlobalStorage.alerts;
         return (
             <div className="App">
                 <nav className="navbar navbar-inverse">

@@ -1,5 +1,6 @@
 import React from 'react';
 import AlertService from '../services/AlertService';
+import GlobalStorage from '../global/GlobalStorage';
 
 const REASON_MAPPING = {
     'CNC Machine': ['Spindle Error', 'Axis Problem', 'Normal'],
@@ -30,7 +31,8 @@ export default class AlertForm extends React.Component {
                 alert: this.props.alert,
                 reason: this.props.alert.reason,
                 action: this.props.alert.action,
-                comment: this.props.alert.comment
+                comment: this.props.alert.comment,
+                showAlert: false,
             });
         }
     }
@@ -40,7 +42,7 @@ export default class AlertForm extends React.Component {
         this.setState(data);
     }
 
-    submit() {
+    submit(e) {
         const self = this;
         const currentAlert = this.props.alert;
         const {reason, action, comment} = this.state;
@@ -58,9 +60,10 @@ export default class AlertForm extends React.Component {
             if (err) {
                 return self.setState({ showAlert: true, updateSuccess: false });
             }
+            GlobalStorage.updateAlertItem(result);
             self.setState({ showAlert: true, updateSuccess: true });
-
         });
+        e.preventDefault();
     }
 
     render() {
@@ -69,6 +72,7 @@ export default class AlertForm extends React.Component {
         const reason = this.state.reason || '';
         const action = this.state.action || '';
         const { alert, showAlert, updateSuccess } = this.state;
+        console.log(comment);
         return (
             <div className="row">
                 <div className="col-sm-9">
